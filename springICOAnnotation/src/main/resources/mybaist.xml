@@ -1,0 +1,47 @@
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 引入jdbc配置文件 -->
+	<properties resource="jdbc.properties"></properties>
+	<settings>
+		<!-- 全局 延迟加载属性 -->
+		<setting name="lazyLoadingEnabled" value="true" />
+		<!-- 开启二级缓存 -->
+		<setting name="cacheEnabled" value="true" />
+	</settings>
+	<!-- 配置别名 -->
+	<typeAliases>
+		<!-- 方式1 每个实体类配置一个别名 -->
+		<!-- <typeAlias alias="d" type="com.dzkj.entity.Dept" /> -->
+		<!-- 方式2 扫描指定包下的类，以类名做别名 -->
+		<package name="com.dzkj.entity" />
+	</typeAliases>
+	<plugins>
+		<!-- 分页插件配置 必须在通用mapper前面 -->
+		<!-- 此方式为 分页插件5.0以上版本 -->
+		<plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin>
+		<!-- 配置通用mapper拦截器 -->
+		<plugin interceptor="com.github.abel533.mapperhelper.MapperInterceptor">
+			<property name="mappers" value="com.github.abel533.mapper.Mapper" />
+		</plugin>
+	</plugins>
+	<!-- 连接环境 -->
+	<environments default="development">
+		<environment id="development">
+			<!-- 事务管理器 jdbc 使用jdbc方式管理事务 managed 不使用事务 又容器框架管理 (如spring) -->
+			<!-- 数据源配置 UPPOOLED 不使用数据源 POOLED 使用数据源 JNDI 使用外部容器中配置的数据源(如tomcat) -->
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.driver}" />
+				<property name="url" value="${jdbc.url}" />
+				<property name="username" value="${jdbc.username}" />
+				<property name="password" value="${jdbc.password}" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<!-- 配置mapper接口 -->
+		<package name="com.dzkj.dao" />
+	</mappers>
+</configuration>
